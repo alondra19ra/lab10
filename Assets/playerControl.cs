@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class playerControl : MonoBehaviour
 {
-    public float speed = 5f;
-    private Vector2 direction = Vector2.right;
-    private bool movingUp = true;
-
-    private void Awake()
+    transform posicion;
+    public int velocidad;
+    public int xDireccion = 1;
+    public int yDireccion = 1;
+    
+    void Awake()
     {
-        direction = Vector2.right;
+        posicion = GetComponent<Transformer>();
+        cambio = GetComponent<SpriteRenderer>();
     }
+
 
     void Start()
     {
@@ -20,35 +23,75 @@ public class playerControl : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.posicion = new Vector2(posicion.posicion.x  + velocidad * xDireccion  *Time.deltaTime, posicion.posicion.y);
 
-        CheckScreenBounds();
 
-        if (movingUp && transform.position.y >= Screen.height)
+        if (posicion.posicion.x >= 6.82)
         {
-            direction.y = -1;
-            movingUp = false;
+            if (cambio.flipX == true)
+            {
+                cambio.flipX = false;
+                cambio.flipY = false;
+            }
+            else 
+            {
+                cambio.flipX = true;
+                cambio.flipY = true;
+            }
+
+            xDireccion = -1;
+        }
+        if (posicion.posicion.x <= -6.82)
+        {
+           if (cambio.flipX == true)
+           {
+               cambio.flipX = false;
+               cambio.flipY = false;
+           }
+
+           else 
+           {
+               cambio.flipX = true;
+               cambio.flipY = true;
+           }
+
+           xDireccion = 1;
         }
 
-        else if (movingUp && transform.position.y <= 0)
+        transform.posicion = new Vector2(posicion.posicion.x, posicion.position.y+velocidad*ydireccion*Time.deltaTime);
+
+        if (posicion.posicion.y >= 4.56)
         {
-            direction.y = 1;
-            movingUp = true;
+           if (cambio.flipX == true)
+           {
+               cambio.flipX = false;
+               cambio.flipY = false;
+           }
+
+           else 
+           {
+               cambio.flipX = true;
+               cambio.flipY = true;
+           }
+
+           yDireccion = -1;
+           
         }
-    }
 
-    void CheckScreenBounds()
-    {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-
-        if (screenPos.x < 0 || screenPos.x >= 6.82)
+        if (posicion.posicion.y <= -4.56)
         {
-            direction.x = -1;
-        }
+            if (cambio.flipX == true)
+            {
+                cambio.flipX = false;
+                cambio.flipY = false;
+            }
+            else
+            {
+                cambio.flipX = true;
+                cambio.flipY = true;
+            }
 
-        if (screenPos.y < 0 || screenPos.y <= -6.82)
-        {
-            direction.y = 1;
+            yDireccion = 1;
         }
     }
 }
